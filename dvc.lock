@@ -1,0 +1,18 @@
+schema: '2.0'
+stages:
+  data_cleaning:
+    cmd: python src/data/data_cleaning.py
+    deps:
+    - path: data/raw/zomato_dataset.csv
+      hash: md5
+      md5: 1cd07135d2787e05e1745c6f1c60ea87
+      size: 6617343
+    - path: src/data/data_cleaning.py
+      hash: md5
+      md5: 34545b6144b23f8467960435009e4251
+      size: 8346
+    outs:
+    - path: data/cleaned/zomato_dataset_cleaned.csv
+      hash: md5
+      md5: f224ef7f5497768736f4e2970dd4072a
+      size: 4511470
