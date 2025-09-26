@@ -1,28 +1,39 @@
 #!/bin/bash
+set -xe
 
-# Ensure that the script runs in non-interactive mode
+# CloudWatch log file
+LOG_FILE="/var/log/codedeploy-beforeinstall.log"
+exec > >(tee -a $LOG_FILE) 2>&1
+
+echo "===== Starting BeforeInstall hook ====="
+
+# Non-interactive mode
 export DEBIAN_FRONTEND=noninteractive
 
-# Update the package lists
-sudo apt-get update -y
+echo "Updating package lists..."
+apt-get update -y
 
-# Install Docker
-sudo apt-get install -y docker.io
+echo "Installing Docker and utilities..."
+apt-get install -y docker.io unzip curl
 
-# Start and enable Docker service
-sudo systemctl start docker
-sudo systemctl enable docker
+echo "Starting and enabling Docker..."
+systemctl start docker
+systemctl enable docker
 
-# Install necessary utilities
-sudo apt-get install -y unzip curl
+echo "Downloading and installing AWS CLI..."
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
+unzip -o /tmp/awscliv2.zip -d /tmp/
+/tmp/aws/install
 
-# Download and install AWS CLI
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/home/ubuntu/awscliv2.zip"
-unzip -o /home/ubuntu/awscliv2.zip -d /home/ubuntu/
-sudo /home/ubuntu/aws/install
+echo "Adding ubuntu user to docker group..."
+usermod -aG docker ubuntu
 
-# Add 'ubuntu' user to the 'docker' group to run Docker commands without 'sudo'
-sudo usermod -aG docker ubuntu
+echo "Cleaning up installation files..."
+rm -rf /tmp/aws /tmp/awscliv2.zip
 
-# Clean up the AWS CLI installation files
-rm -rf /home/ubuntu/awscliv2.zip /home/ubuntu/aws
+echo "===== BeforeInstall hook completed successfully ====="
+
+# Optional: push log to CloudWatch immediately
+if [ -f /etc/awslogs/awslogs.conf ]; then
+    service awslogs restart
+fi
