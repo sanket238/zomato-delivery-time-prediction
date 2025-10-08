@@ -25,7 +25,7 @@ The final outcome is an API endpoint that predicts **estimated delivery time (in
 | **Language** | Python 3.8+ |
 | **Data Handling** | pandas, numpy, scikit-learn |
 | **Visualization** | matplotlib, seaborn |
-| **Modeling** | XGBoost, RandomForest, LightGBM |
+| **Modeling** | RandomForest, LightGBM |
 | **Optimization** | Optuna |
 | **Experiment Tracking** | MLflow, DAGsHub |
 | **Data Versioning** | DVC |
