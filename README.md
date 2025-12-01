@@ -30,7 +30,6 @@ The final outcome is an API endpoint that predicts **estimated delivery time (in
 | **Experiment Tracking** | MLflow, DAGsHub |
 | **Data Versioning** | DVC |
 | **Serving / Deployment** | FastAPI, Uvicorn |
-| **Containerization** | Docker |
 | **Version Control** | Git & GitHub |
 
 ---
